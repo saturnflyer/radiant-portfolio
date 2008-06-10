@@ -1,0 +1,14 @@
+<h1>Edit Client</h1>
+<% form_for @client, :url => admin_client_path(@client) do |c| %>
+	<div class="form-area">
+	<%= render :partial => 'client', :locals => {:f => c} %>
+		<div id="tab-control">
+			<div id="pages" class="pages">
+			<% fields_for :client_text do |t| %>
+				<%= render :partial => 'admin/client_texts/client_text', :collection => @client.client_texts, :locals => {:f => t }%>
+			<% end %>
+			</div>
+		</div>
+	</div>
+	<p class="buttons"><%= submit_tag "Save Changes", :class => 'button' %> <%= submit_tag "Save and Continue Editing", :class => 'button' %> or <%= link_to "Cancel", admin_clients_path %></p>
+<% end %>

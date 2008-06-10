@@ -1,0 +1,31 @@
+<h1>Clients</h1>
+<% unless @clients.blank? %>
+<table class="index">
+	<thead>
+		<tr>
+			<th>Client</th>
+			<th>Modify</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @clients.each do |client| %>
+	<tr class="node">
+		<td class="page"><%= link_to client.name, edit_admin_client_path(client) %></td>
+		<td><%= link_to "Remove", admin_client_path(client), :method => :delete if admin?%></td>
+	</tr>
+	<% end %>
+	</tbody>
+</table>
+<% end %>
+<%- if admin? %>
+	<% form_for :client, @client, :url => admin_clients_path do |c| %>
+		<%= render :partial => 'admin/clients/client', :locals => {:f => c}%>
+		<p class="buttons"><%= submit_tag 'Create New Client', :class => 'button' %></p>
+	<% end %>
+<% else %>
+	<%- if @clients.blank? %>
+		<p>There are no clients created. Speak with an administrator of this site if you need one created.</p>
+	<%- else %>
+		<p>Contact an administrator of this site if you need a client created for you</p>
+	<%- end %>
+<%- end %>
