@@ -8,6 +8,7 @@ class Admin::ClientsController < ApplicationController
   def index
     @clients = Client.find(:all)
     @client = Client.new
+    @projects = Project.find(:all)
   end
   
   def create

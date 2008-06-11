@@ -1,11 +1,11 @@
-<h1>Edit Client</h1>
-<% form_for @client, :url => admin_client_path(@client) do |c| %>
+<h1>New <%= @client.name %> Project</h1>
+<% form_for @project, :url => admin_client_projects_path(@client) do |p| %>
 	<div class="form-area">
-	<%= render :partial => 'client', :locals => {:f => c} %>
+	<%= render :partial => 'project', :locals => {:f => p} %>
 		<div id="tab-control">
 			<div id="pages" class="pages">
-			<% fields_for :client_text do |t| %>
-				<%= render :partial => 'admin/client_texts/client_text', :collection => @client.client_texts, :locals => {:f => t }%>
+			<% fields_for :project_text do |t| %>
+				<%= render :partial => 'admin/project_texts/project_text', :locals => {:f => t }%>
 			<% end %>
 			</div>
 		</div>

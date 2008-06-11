@@ -1,0 +1,9 @@
+<div class="page">
+  <div id="project_text_box">
+    <%= hidden_field_tag "project_text[name]", 'description' %>
+    <p>
+      <%= @project.project_texts[0].name %> <%= f.hidden_field :filter_id, :value => 'Markdown'%>
+    </p>
+    <div><%= text_area_tag "project_text[content]", h(@project.project_texts[0].content), :style => "width: 100%; height: 13em;" %></div>
+  </div>
+</div>

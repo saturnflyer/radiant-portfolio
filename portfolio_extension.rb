@@ -9,13 +9,18 @@ class PortfolioExtension < Radiant::Extension
   define_routes do |map|
     map.namespace(:admin) do |admin|
       admin.portfolio "/portfolio", :controller => 'clients', :conditions => {:method => :get}
-      admin.resources :clients, :has_many => :client_texts, :member => {:add_text => :post}
+      admin.resources :clients, :member => {:add_text => :post} do |clients|
+        clients.resources :client_texts
+        clients.resources :projects do |projects|
+          projects.resources :project_texts
+        end
+      end
     end
   end
   
   def activate
     # join already observed models with portforlio extension models 
-    observables = UserActionObserver.instance.observed_classes | [Client, ClientText] 
+    observables = UserActionObserver.instance.observed_classes | [Client, ClientText, Project, ProjectText] 
 
     # update list of observables 
     UserActionObserver.send :observe, observables 
@@ -23,6 +28,8 @@ class PortfolioExtension < Radiant::Extension
     # connect UserActionObserver with my models 
     UserActionObserver.instance.send :add_observer!, Client 
     UserActionObserver.instance.send :add_observer!, ClientText 
+    UserActionObserver.instance.send :add_observer!, Project 
+    UserActionObserver.instance.send :add_observer!, ProjectText 
     admin.tabs.add "Portfolio", "/admin/portfolio", :after => "Layouts", :visibility => [:all]
   end
   

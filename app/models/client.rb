@@ -2,8 +2,11 @@ class Client < ActiveRecord::Base
   after_create :add_default_client_texts
   
   has_many :client_texts, :dependent => :destroy
+  has_many :projects, :dependent => :destroy
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
+  
+  validates_uniqueness_of :name
   
   private
   

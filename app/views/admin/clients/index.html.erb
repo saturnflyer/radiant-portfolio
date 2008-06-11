@@ -3,16 +3,24 @@
 <table class="index">
 	<thead>
 		<tr>
-			<th>Client</th>
+			<th>Clients and Projects</th>
 			<th>Modify</th>
 		</tr>
 	</thead>
 	<tbody>
 	<% @clients.each do |client| %>
-	<tr class="node">
+	<tr class="node level-0">
 		<td class="page"><%= link_to client.name, edit_admin_client_path(client) %></td>
-		<td><%= link_to "Remove", admin_client_path(client), :method => :delete if admin?%></td>
+		<td><%= link_to "Remove", admin_client_path(client), :method => :delete if admin?%> <%= link_to "Add Project", new_admin_client_project_path(client) %></td>
 	</tr>
+		<% unless client.projects.blank? %>
+			<% client.projects.each do |project| %>
+			<tr class="node level-1">
+				<td class="page" style="padding-left: 26px;"><%= link_to project.name, edit_admin_client_project_path(project.client,project) %></td>
+				<td><%= link_to "Remove", admin_client_project_path(project.client,project), :method => :delete if admin?%></td>
+			</tr>
+			<% end %>
+		<% end %>
 	<% end %>
 	</tbody>
 </table>
