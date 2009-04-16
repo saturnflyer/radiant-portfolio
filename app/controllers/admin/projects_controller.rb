@@ -15,6 +15,22 @@ class Admin::ProjectsController < ApplicationController
     @project.project_texts.build()
   end
   
+  def edit
+    @project = @client.projects.find(params[:id])
+  end
+  
+  def update
+    @project = @client.projects.find(params[:id])
+    logger.debug params[:project]
+    if @project.update_attributes(params[:project])
+      text = params[:project_text]
+      @project.project_texts.find_by_name(text[:name]).update_attributes(text)
+      redirect_to admin_portfolio_path
+    else
+      render :action => 'edit'
+    end
+  end
+  
   def create
     @project = @client.projects.build(params[:project])
     if @project.save
@@ -25,6 +41,12 @@ class Admin::ProjectsController < ApplicationController
       flash[:notice] = "The project could not be created."
       render :action => 'new'
     end
+  end
+  
+  def destroy
+    @project = @client.projects.find(:id)
+    @project.destroy
+    redirect_to admin_clients_path
   end
   
   private

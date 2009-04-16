@@ -19,12 +19,6 @@ class PortfolioExtension < Radiant::Extension
   end
   
   def activate
-    # join already observed models with portforlio extension models 
-    observables = UserActionObserver.instance.observed_classes | [Client, ClientText, Project, ProjectText] 
-
-    # update list of observables 
-    UserActionObserver.send :observe, observables 
-
     # connect UserActionObserver with my models 
     UserActionObserver.instance.send :add_observer!, Client 
     UserActionObserver.instance.send :add_observer!, ClientText 

@@ -2,6 +2,16 @@ namespace :radiant do
   namespace :extensions do
     namespace :portfolio do
       
+      require 'cucumber/rake/task'
+      Cucumber::Rake::Task.new(:features) do |t|
+        t.rcov = true
+        t.rcov_opts = %w{--exclude .rb --include-file vendor\/extensions\/portfolio\/app,vendor\/extensions\/portfolio\/lib}
+        t.feature_pattern = File.dirname(__FILE__) + '/../../features/**/*.feature'
+        t.step_pattern = File.dirname(__FILE__) + '/../../features/**/*.rb'
+        t.cucumber_opts = "--format pretty"
+      end
+      task :features => 'db:test:prepare'
+      
       desc "Runs the migration of the Portfolio extension"
       task :migrate => :environment do
         require 'radiant/extension_migrator'

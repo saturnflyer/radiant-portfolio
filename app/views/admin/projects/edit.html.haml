@@ -1,0 +1,13 @@
+%h1= "#{@client.name} Project"
+- form_for @project, :url => admin_client_project_path(@client) do |p|
+  .form-area
+    = render :partial => 'project', :locals => {:f => p}
+    #tab-control
+      #pages.pages
+      - fields_for :project_text do |t|
+        = render :partial => 'admin/project_texts/project_text', :locals => {:f => t }
+  %p.buttons
+    = submit_tag "Save Changes", :class => 'button' 
+    = submit_tag "Save and Continue Editing", :class => 'button'
+    or 
+    = link_to "Cancel", admin_portfolio_path
