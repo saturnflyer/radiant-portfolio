@@ -1,0 +1,30 @@
+%h1 Clients
+- unless @clients.blank?
+  %table{ :class => "index"}
+    %thead
+      %tr
+        %th Clients and Projects
+        %th Modify
+    %tbody
+      - @clients.each do |client|
+        %tr{ :class => "node level-0"}
+          %td{ :class => "page"}= link_to client.name, edit_admin_client_path(client)
+          %td
+            = link_to "Remove", admin_client_path(client), :method => :delete if admin?
+            = link_to "Add Project", new_admin_client_project_path(client)
+        - unless client.projects.blank?
+          - client.projects.each do |project|
+            %tr{ :class => "node level-1"}
+              %td{ :class => "page", :style => "padding-left: 26px;"}= link_to project.name, edit_admin_client_project_path(project.client,project)
+              %td
+                = link_to "Remove", admin_client_project_path(project.client,project), :method => :delete if admin?
+- if admin?
+  - form_for :client, @client, :url => admin_clients_path do |c|
+    .form-area
+      = render :partial => 'admin/clients/client', :locals => {:f => c}
+      %p{ :class => "buttons"}= submit_tag 'Create New Client', :class => 'button'
+- else
+  - if @clients.blank?
+    %pThere are no clients created. Speak with an administrator of this site if you need one created.
+  - else
+    %pContact an administrator of this site if you need a client created for you

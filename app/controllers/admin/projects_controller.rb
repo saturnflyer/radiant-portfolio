@@ -25,7 +25,11 @@ class Admin::ProjectsController < ApplicationController
     if @project.update_attributes(params[:project])
       text = params[:project_text]
       @project.project_texts.find_by_name(text[:name]).update_attributes(text)
-      redirect_to admin_portfolio_path
+      if params[:commit] == "Save and Continue Editing"
+        redirect_to edit_admin_client_project_url(@client, @project)
+      else
+        redirect_to admin_portfolio_url
+      end
     else
       render :action => 'edit'
     end

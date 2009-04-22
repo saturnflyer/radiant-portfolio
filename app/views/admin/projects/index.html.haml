@@ -1,0 +1,24 @@
+%h1= "#{@client.name} Projects"
+- unless @projects.blank?
+  %table{:class =>"index"}
+    %thead
+      %tr
+        %th Project
+        %th Modify
+    %tbody
+      - @projects.each do |project|
+        %tr{:class => "node"}
+          %td{:class => "page"}
+            = link_to project.name, edit_admin_client_project_path(@client, project)
+          %td
+            = link_to "Remove", admin_client_project_path(@client,project), :method => :delete if admin?
+- if admin?
+  - form_for :project, @project, :url => admin_client_projects_path(@client) do |p|
+    .form-area
+      = render :partial => 'admin/projects/project', :locals => {:f => p}
+      %p{:class => "buttons"}= submit_tag 'Create New Client', :class => 'button'
+- else
+  - if @projects.blank?
+    %p There are no projects created. Speak with an administrator of this site if you need one created.
+  - else
+    %p Contact an administrator of this site if you need a project created for you.
