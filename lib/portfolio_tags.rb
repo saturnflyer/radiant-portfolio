@@ -9,7 +9,8 @@ module PortfolioTags
       tag.expand
     end
     tag "#{portfolio_model.to_s}:each" do |tag|
-      collection = portfolio_model.to_s.classify.constantize.find(:all, collection_find_options(tag))
+      model_class = portfolio_model.to_s.classify.constantize
+      collection = model_class.find(:all, collection_find_options(tag, model_class.new))
       tag.locals.send("#{portfolio_model}=", collection)
       result = ''
       collection.each do |item|
@@ -27,7 +28,7 @@ module PortfolioTags
     end
   end
   
-  def collection_find_options(tag)
+  def collection_find_options(tag, model)
     attr = tag.attr.symbolize_keys
     
     options = {}
@@ -41,6 +42,21 @@ module PortfolioTags
         end
       end
     end
+        
+    by = (attr[:by] || 'created_at').strip
+    order = (attr[:order] || 'asc').strip
+    order_string = ''
+    if model.attributes.keys.include?(by)
+      order_string << by
+    else
+      raise TagError.new("`by' attribute of `each' tag must be set to a valid field name")
+    end
+    if order =~ /^(asc|desc)$/i
+      order_string << " #{$1.upcase}"
+    else
+      raise TagError.new(%{`order' attribute of `each' tag must be set to either "asc" or "desc"})
+    end
+    options[:order] = order_string
     
     options
   end

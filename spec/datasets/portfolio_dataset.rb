@@ -30,8 +30,8 @@ class PortfolioDataset < Dataset::Base
   
   def create_project(name, text = nil)
     create_record :project, name.symbolize, :name => name, :client_id => @client_id
-    # unless text.blank?
+    unless text.blank?
       create_record :project_text, :name => 'description', :content => text, :project_id => project_id(name.symbolize)
-    # end
+    end
   end
 end
