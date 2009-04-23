@@ -2,6 +2,9 @@ namespace :radiant do
   namespace :extensions do
     namespace :portfolio do
       
+      desc "Runs the migration and update tasks of the Portfolio extension"
+      task :install => [:environment, :migrate, :update]
+      
       require 'cucumber/rake/task'
       Cucumber::Rake::Task.new(:features) do |t|
         t.rcov = true
