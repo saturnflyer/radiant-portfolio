@@ -25,18 +25,24 @@ describe Page do
           pages(:home).should render('<r:clients:each limit="3" offset="abc">text </r:clients:each>').with_error("`offset' attribute of `each' tag must be a positive number between 1 and 4 digits")
         end
       end
-      describe "with by" do
+      describe "with ordering" do
         it "should sort by the given by field" do
           pages(:home).should render('<r:clients:each limit="3" by="name"><r:name /> </r:clients:each>').as('Bright Yellow Jacket Ignite Social Media Kratos Defense ')
         end
         it "should default sort by created_at" do
           pages(:home).should render('<r:clients:each limit="3"><r:name /> </r:clients:each>').as('Saturn Flyer Ignite Social Media Kratos Defense ')
         end
+        it "should err with an invalid by field" do
+          pages(:home).should render('<r:clients:each by="aoeu"><r:name /> </r:clients:each>').with_error("`by' attribute of `each' tag must be set to a valid field name")
+        end
         it "should order by the given order field" do
           pages(:home).should render('<r:clients:each limit="3" by="name" order="desc"><r:name /> </r:clients:each>').as('Smithsonian Saturn Flyer Kratos Defense ')
         end
         it "should default order to ascending" do
           pages(:home).should render('<r:clients:each limit="3" by="name"><r:name /> </r:clients:each>').as('Bright Yellow Jacket Ignite Social Media Kratos Defense ')
+        end
+        it "should err with an invalid order attribute" do
+          pages(:home).should render('<r:clients:each order="123"><r:name /></r:clients:each>').with_error(%{`order' attribute of `each' tag must be set to either "asc" or "desc"})
         end
       end
       describe "name" do
@@ -74,18 +80,24 @@ describe Page do
           pages(:home).should render('<r:projects:each limit="3" offset="abc">text </r:projects:each>').with_error("`offset' attribute of `each' tag must be a positive number between 1 and 4 digits")
         end
       end
-      describe "with by" do
+      describe "with ordering" do
         it "should sort by the given by field" do
           pages(:home).should render('<r:projects:each limit="3" by="name"><r:name /> </r:projects:each>').as('byj site ignite website invertebrates ')
         end
         it "should default sort by created_at" do
           pages(:home).should render('<r:projects:each limit="3"><r:name /> </r:projects:each>').as('ignite website iris invertebrates ')
         end
+        it "should err with an invalid by field" do
+          pages(:home).should render('<r:projects:each by="aoeu"><r:name /> </r:projects:each>').with_error("`by' attribute of `each' tag must be set to a valid field name")
+        end
         it "should order by the given order field" do
           pages(:home).should render('<r:projects:each limit="3" by="name" order="desc"><r:name /> </r:projects:each>').as('iris invertebrates ignite website ')
         end
         it "should default order to ascending" do
           pages(:home).should render('<r:projects:each limit="3" by="name"><r:name /> </r:projects:each>').as('byj site ignite website invertebrates ')
+        end
+        it "should err with an invalid order attribute" do
+          pages(:home).should render('<r:projects:each order="123"><r:name /></r:projects:each>').with_error(%{`order' attribute of `each' tag must be set to either "asc" or "desc"})
         end
       end
       describe "name" do
