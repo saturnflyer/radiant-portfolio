@@ -19,7 +19,6 @@ class PortfolioExtension < Radiant::Extension
   end
   
   def activate
-    # connect UserActionObserver with my models 
     Page.send :include, PortfolioTags
     UserActionObserver.instance.send :add_observer!, Client 
     UserActionObserver.instance.send :add_observer!, ClientText 

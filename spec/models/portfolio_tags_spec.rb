@@ -30,6 +30,11 @@ describe Page do
           pages(:home).should render('<r:clients:each><r:name /> </r:clients:each>').as('Saturn Flyer Ignite Social Media Kratos Defense Smithsonian Bright Yellow Jacket ')
         end
       end
+      describe "content" do
+        it "should display the client description" do
+          pages(:home).should render('<r:clients:each limit="1"><r:content /></r:clients:each>').as('designers and developers')
+        end
+      end
     end
   end
   
@@ -58,6 +63,11 @@ describe Page do
       describe "name" do
         it "should display the client name" do
           pages(:home).should render('<r:projects:each><r:name /> </r:projects:each>').as('ignite website iris invertebrates byj site ')
+        end
+      end
+      describe "content" do
+        it "should display the project description" do
+          pages(:home).should render('<r:projects:each limit="1"><r:content /></r:projects:each>').as('moving to Radiant')
         end
       end
     end

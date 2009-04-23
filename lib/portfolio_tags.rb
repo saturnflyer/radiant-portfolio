@@ -4,6 +4,7 @@ module PortfolioTags
   class TagError < StandardError; end
   
   [:clients, :projects].each do |portfolio_model|
+    single_model = portfolio_model.to_s.singularize
     tag "#{portfolio_model.to_s}" do |tag|
       tag.expand
     end
@@ -12,13 +13,17 @@ module PortfolioTags
       tag.locals.send("#{portfolio_model}=", collection)
       result = ''
       collection.each do |item|
-        tag.locals.send("#{portfolio_model.to_s.singularize}=", item)
+        tag.locals.send("#{single_model}=", item)
         result <<  tag.expand
       end
       result
     end
     tag "#{portfolio_model.to_s}:each:name" do |tag|
-      tag.locals.send("#{portfolio_model.to_s.singularize}").send(:name)
+      tag.locals.send("#{single_model}").send(:name)
+    end
+    tag "#{portfolio_model.to_s}:each:content" do |tag|
+      text_type = single_model + "_text"
+      tag.locals.send("#{single_model}").send(text_type+"s").find(:first, :conditions => ['name = ?', 'description']).content
     end
   end
   
