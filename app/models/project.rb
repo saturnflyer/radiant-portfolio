@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   
   belongs_to :client
   has_many :project_texts, :dependent => :destroy
+  has_many :testimonials, :through => :project_testimonials
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   

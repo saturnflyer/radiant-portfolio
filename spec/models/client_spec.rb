@@ -6,6 +6,7 @@ describe Client do
   end
 
   it "should have at least 1 client text" do
+    @client.save!
     @client.should have_at_least(1).client_texts
   end
 end

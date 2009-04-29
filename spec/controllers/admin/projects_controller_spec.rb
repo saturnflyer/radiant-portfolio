@@ -4,7 +4,7 @@ describe Admin::ProjectsController do
 
   #Delete this example and add some real ones
   it "should use ProjectsController" do
-    controller.should be_an_instance_of(ProjectsController)
+    controller.should be_an_instance_of(Admin::ProjectsController)
   end
 
 end

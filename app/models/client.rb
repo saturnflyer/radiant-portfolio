@@ -3,6 +3,7 @@ class Client < ActiveRecord::Base
   
   has_many :client_texts, :dependent => :destroy
   has_many :projects, :dependent => :destroy
+  has_many :testimonials, :through => :client_testimonials, :dependent => :destroy
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   

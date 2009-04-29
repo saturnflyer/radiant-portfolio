@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Page do
-  dataset :pages, :portfolio
+  dataset :portfolio
 
   describe "clients" do
     it "should expand it's contents" do
@@ -108,6 +108,66 @@ describe Page do
       describe "content" do
         it "should display the project description" do
           pages(:home).should render('<r:projects:each limit="1"><r:content /></r:projects:each>').as('moving to Radiant')
+        end
+      end
+    end
+  end
+  
+  describe "testimonials" do
+    it "should expand it's contents" do
+      pages(:home).should render('<r:testimonials>text</r:testimonials>').as('text')
+    end
+    describe "each" do
+      it "should expand it's contents for each item" do
+        pages(:home).should render('<r:testimonials:each>text </r:testimonials:each>').as('text text text ')
+      end
+      describe "with limit" do
+        it "should limit the records" do
+          pages(:home).should render('<r:testimonials:each limit="3">text </r:testimonials:each>').as('text text text ')
+        end
+        it "should error with a non-numeric limit" do
+          pages(:home).should render('<r:testimonials:each limit="abc">text </r:testimonials:each>').with_error("`limit' attribute of `each' tag must be a positive number between 1 and 4 digits")
+        end
+        it "should offset the records" do
+          pages(:home).should render('<r:testimonials:each limit="2" offset="1"><r:author /> </r:testimonials:each>').as('Vikram Khemani Stephen Oster ')
+        end
+        it "should error with a non-numeric offset" do
+          pages(:home).should render('<r:testimonials:each limit="3" offset="abc">text </r:testimonials:each>').with_error("`offset' attribute of `each' tag must be a positive number between 1 and 4 digits")
+        end
+      end
+      describe "with ordering" do
+        it "should sort by the given by field" do
+          pages(:home).should render('<r:testimonials:each limit="3" by="author"><r:author /> </r:testimonials:each>').as('Gene Smith Stephen Oster Vikram Khemani ')
+        end
+        it "should default sort by created_at" do
+          pages(:home).should render('<r:testimonials:each limit="3"><r:author /> </r:testimonials:each>').as('Gene Smith Vikram Khemani Stephen Oster ')
+        end
+        it "should err with an invalid by field" do
+          pages(:home).should render('<r:testimonials:each by="aoeu"><r:author /> </r:testimonials:each>').with_error("`by' attribute of `each' tag must be set to a valid field name")
+        end
+        it "should order by the given order field" do
+          pages(:home).should render('<r:testimonials:each limit="3" by="author" order="desc"><r:author /> </r:testimonials:each>').as('Vikram Khemani Stephen Oster Gene Smith ')
+        end
+        it "should default order to ascending" do
+          pages(:home).should render('<r:testimonials:each limit="3" by="author"><r:author /> </r:testimonials:each>').as('Gene Smith Stephen Oster Vikram Khemani ')
+        end
+        it "should err with an invalid order attribute" do
+          pages(:home).should render('<r:testimonials:each order="123"><r:author /></r:testimonials:each>').with_error(%{`order' attribute of `each' tag must be set to either "asc" or "desc"})
+        end
+      end
+      describe "author" do
+        it "should display the author" do
+          pages(:home).should render('<r:testimonials:each><r:author /> </r:testimonials:each>').as('Gene Smith Vikram Khemani Stephen Oster ')
+        end
+      end
+      describe "author_title" do
+        it "should display the author_title" do
+          pages(:home).should render('<r:testimonials:each><r:author_title /> </r:testimonials:each>').as('  Founding Partner ')
+        end
+      end
+      describe "content" do
+        it "should display the project comment" do
+          pages(:home).should render('<r:testimonials:each limit="1"><r:comment /></r:testimonials:each>').as("They're work is incredible!")
         end
       end
     end

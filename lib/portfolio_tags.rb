@@ -3,7 +3,7 @@ module PortfolioTags
 
   class TagError < StandardError; end
   
-  [:clients, :projects].each do |portfolio_model|
+  [:clients, :projects, :testimonials].each do |portfolio_model|
     single_model = portfolio_model.to_s.singularize
     tag "#{portfolio_model.to_s}" do |tag|
       tag.expand
@@ -19,6 +19,9 @@ module PortfolioTags
       end
       result
     end
+  end
+  [:clients, :projects ].each do |portfolio_model|
+    single_model = portfolio_model.to_s.singularize
     tag "#{portfolio_model.to_s}:each:name" do |tag|
       tag.locals.send("#{single_model}").send(:name)
     end
@@ -26,6 +29,16 @@ module PortfolioTags
       text_type = single_model + "_text"
       tag.locals.send("#{single_model}").send(text_type+"s").find(:first, :conditions => ['name = ?', 'description']).content
     end
+  end
+  
+  tag "testimonials:each:author" do |tag|
+    tag.locals.testimonial.author
+  end
+  tag "testimonials:each:author_title" do |tag|
+    tag.locals.testimonial.author_title
+  end
+  tag "testimonials:each:comment" do |tag|
+    tag.locals.testimonial.comment
   end
   
   def collection_find_options(tag, model)
